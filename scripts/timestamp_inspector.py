@@ -20,18 +20,22 @@ class Statistics(object):
         ]
         self.median = self.quartiles[1]
         self.average = sum(self.sorted) / count
-        squared_diff_from_avg = map(lambda d: (d - self.average)**2, self.sorted)
+        square_diff = lambda d: (d - self.average)**2
+        squared_diff_from_avg = map(square_diff, self.sorted)
         self.stdev = (sum(squared_diff_from_avg) / count).sqrt()
         self._stdev_percent = self.stdev / self.average * 100
+        self.count = count
 
     def __repr__(self):
         return """
-Topic:     %s
-Quartiles: %s
-Average:   % 15.5f
-StDev:     % 15.5f
-         = % 15.5f%% of average""" % (self.topic, self.quartiles, self.average,
-                 self.stdev, self._stdev_percent)
+Topic:      %s
+# Messages: %s
+Quartiles:  %s
+Average:    % 15.5f
+StDev:      % 15.5f
+         =  % 15.5f %% of average""" % (self.topic, self.count, 
+                 self.quartiles, self.average, self.stdev,
+                 self._stdev_percent)
 
 if __name__ == "__main__":
     if len(sys.argv) <= 1:
